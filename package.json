@@ -1,0 +1,26 @@
+{
+  "name": "burgersmash",
+  "version": "1.0.0",
+  "description": "an app for creating and smashing burgers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/langjeff/burgerSmash.git"
+  },
+  "author": "Jeffrey Lang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/langjeff/burgerSmash/issues"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "express-handlebars": "^5.2.0",
+    "handlebars": "^4.7.6",
+    "mysql2": "^1.6.4",
+    "sequelize": "^4.41.2"
+  },
+  "homepage": "https://github.com/langjeff/burgerSmash#readme"
+}
