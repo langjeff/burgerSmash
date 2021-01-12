@@ -1,77 +1,77 @@
 // Wait for the DOM to completely load before we run our JS
-document.addEventListener('DOMContentLoaded', (e) => {
-  console.log('dom loaded!');
+document.addEventListener("DOMContentLoaded", (e) => {
+  console.log("dom loaded!");
 
-  const todoContainer = document.querySelector('.todo-container');
-  const todoForm = document.getElementById('todo-form');
+  const burgerContainer = document.querySelector(".burger-container");
+  const burgerForm = document.getElementById("burger-form");
 
-  // Inital todos array
-  let todos = [];
+  // Inital burgers array
+  let burgers = [];
 
   // Helper function to hide items
   const hide = (el) => {
-    el.style.display = 'none';
+    el.style.display = "none";
   };
   const show = (el) => {
-    el.style.display = 'inline';
+    el.style.display = "inline";
   };
 
-  // This function resets the todos displayed with new todos from the database
+  // This function resets the burgers displayed with new burgers from the database
   const initializeRows = () => {
-    todoContainer.innerHTML = '';
+    burgerContainer.innerHTML = "";
     const rowsToAdd = [];
-    for (let i = 0; i < todos.length; i++) {
-      rowsToAdd.push(createNewRow(todos[i]));
+    for (let i = 0; i < burgers.length; i++) {
+      rowsToAdd.push(createNewRow(burgers[i]));
     }
 
-    rowsToAdd.forEach((row) => todoContainer.prepend(row));
+    rowsToAdd.forEach((row) => burgerContainer.prepend(row));
   };
 
-  // Helper function to grab todos
-  const getTodos = () => {
-    fetch('/api/todos', {
-      method: 'GET',
+  // Helper function to grab burgers
+  const getBurgers = () => {
+    fetch("/api/burgers", {
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Success in getting todos:', data);
-        todos = data;
+        console.log("Success in getting burgers:", data);
+        burgers = data;
         initializeRows();
       });
   };
 
-  getTodos();
+  getBurgers();
 
-  // Helper function to delete a todo
-  const deleteTodo = (e) => {
+  // Helper function to delete a burger
+  const deleteBurgers = (e) => {
     e.stopPropagation();
     const { id } = e.target.dataset;
 
-    fetch(`/api/todos/${id}`, {
-      method: 'DELETE',
+    fetch(`/api/burgers/${id}`, {
+      method: "DELETE",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    }).then(getTodos);
+    }).then(getBurgers);
   };
 
-  // Function to handle the editing of a todo when input is clicked
-  const editTodo = (e) => {
+  // Function to handle the editing of a burger when input is clicked
+  const editBurgers = (e) => {
     const itemChildren = e.target.children;
-    // console.log('editTodo -> itemChildren', itemChildren);
+    // console.log('editBurgers -> itemChildren', itemChildren);
     for (let i = 0; i < itemChildren.length; i++) {
       const currentEl = itemChildren[i];
 
-      if (currentEl.tagName === 'INPUT') {
+      if (currentEl.tagName === "INPUT") {
         currentEl.value = currentEl.parentElement.children[0].innerText;
         show(currentEl);
         currentEl.focus();
       }
 
-      if (currentEl.tagName === 'SPAN' || currentEl.tagName === 'BUTTON') {
+      if (currentEl.tagName === "SPAN" || currentEl.tagName === "BUTTON") {
         hide(currentEl);
       }
     }
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
       for (let i = 0; i < itemParent.children.length; i++) {
         const currentChild = itemParent.children[i];
 
-        if (currentChild.tagName === 'INPUT') {
+        if (currentChild.tagName === "INPUT") {
           hide(currentChild);
         } else {
           show(currentChild);
@@ -93,39 +93,39 @@ document.addEventListener('DOMContentLoaded', (e) => {
     }
   };
 
-  // Update a todo (PUT)
-  const updateTodo = (todo) => {
-    console.log('attempting to update with', todo);
-    fetch('/api/todos', {
-      method: 'PUT',
+  // Update a burger (PUT)
+  const updateBurger = (burger) => {
+    console.log("attempting to update with", burger);
+    fetch("/api/burgers", {
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(todo),
+      body: JSON.stringify(burger),
     }).then((response) => console.log(response));
   };
 
-  // Function to call when we are finished editing a todo
+  // Function to call when we are finished editing a burger
   const finishEdit = (e) => {
     if (e.keyCode === 13) {
       const itemParent = e.target.parentElement;
-      const updatedTodo = {
+      const updatedBurger = {
         text: e.target.value.trim(),
         completed: false,
         id: e.target.dataset.id,
       };
 
       // Update the text in the dom
-      itemParent.childNodes[0].innerText = updatedTodo.text;
+      itemParent.childNodes[0].innerText = updatedBurger.text;
 
       // Call on our helper function to preform a PUT request
-      updateTodo(updatedTodo);
+      updateBurger(updatedBurger);
 
       if (itemParent) {
         for (let i = 0; i < itemParent.children.length; i++) {
           const currentChild = itemParent.children[i];
 
-          if (currentChild.tagName === 'INPUT') {
+          if (currentChild.tagName === "INPUT") {
             hide(currentChild);
           } else {
             show(currentChild);
@@ -135,43 +135,43 @@ document.addEventListener('DOMContentLoaded', (e) => {
     }
   };
 
-  // Construct a todo-item row
-  const createNewRow = (todo) => {
+  // Construct a burger-item row
+  const createNewRow = (burger) => {
     // Containing row
-    const newInputRow = document.createElement('li');
-    newInputRow.classList.add('list-group-item', 'todo-item');
-    newInputRow.setAttribute('complete', todo.complete);
+    const newInputRow = document.createElement("li");
+    newInputRow.classList.add("list-group-item", "burger-item");
+    newInputRow.setAttribute("complete", burger.complete);
 
     // Span
-    const rowSpan = document.createElement('span');
-    rowSpan.innerText = todo.text;
+    const rowSpan = document.createElement("span");
+    rowSpan.innerText = burger.text;
 
     // Input field
-    const rowInput = document.createElement('input');
-    rowInput.setAttribute('type', 'text');
-    rowInput.classList.add('edit');
-    rowInput.style.display = 'none';
+    const rowInput = document.createElement("input");
+    rowInput.setAttribute("type", "text");
+    rowInput.classList.add("edit");
+    rowInput.style.display = "none";
 
     // Delete button
-    const delBtn = document.createElement('button');
-    delBtn.classList.add('delete', 'btn', 'btn-danger');
-    delBtn.setAttribute('data-id', todo.id);
-    rowInput.setAttribute('data-id', todo.id);
-    delBtn.innerText = 'x';
-    delBtn.addEventListener('click', deleteTodo);
+    const delBtn = document.createElement("button");
+    delBtn.classList.add("delete", "btn", "btn-danger");
+    delBtn.setAttribute("data-id", burger.id);
+    rowInput.setAttribute("data-id", burger.id);
+    delBtn.innerText = "x";
+    delBtn.addEventListener("click", deleteBurgers);
 
     // Complete button
-    const completeBtn = document.createElement('button');
-    completeBtn.classList.add('complete', 'btn', 'btn-primary');
-    completeBtn.innerText = '✓';
-    completeBtn.setAttribute('data-id', todo.id);
+    const completeBtn = document.createElement("button");
+    completeBtn.classList.add("complete", "btn", "btn-primary");
+    completeBtn.innerText = "✓";
+    completeBtn.setAttribute("data-id", burger.id);
 
-    completeBtn.addEventListener('click', toggleComplete);
+    completeBtn.addEventListener("click", toggleSmashed);
 
     // Add event listener for editing
-    newInputRow.addEventListener('click', editTodo);
-    rowInput.addEventListener('blur', cancelEdit);
-    rowInput.addEventListener('keyup', finishEdit);
+    newInputRow.addEventListener("click", editBurgers);
+    rowInput.addEventListener("blur", cancelEdit);
+    rowInput.addEventListener("keyup", finishEdit);
 
     // Append all items to the row
     newInputRow.appendChild(rowSpan);
@@ -179,48 +179,48 @@ document.addEventListener('DOMContentLoaded', (e) => {
     newInputRow.appendChild(delBtn);
     newInputRow.appendChild(completeBtn);
 
-    if (todo.complete) {
-      rowSpan.style.textDecoration = 'line-through';
+    if (burger.complete) {
+      rowSpan.style.textDecoration = "line-through";
     }
 
     return newInputRow;
   };
 
-  const toggleComplete = (e) => {
+  const toggleSmashed = (e) => {
     e.stopPropagation();
     const spanEl = e.target.parentNode.children[0];
-    const currentTodo = {
+    const currentBurger = {
       text: e.target.parentNode.children[0].innerText,
       complete: false,
       id: e.target.dataset.id,
     };
-    currentTodo.complete = !currentTodo.complete;
-    spanEl.style.textDecoration = 'line-through';
-    updateTodo(currentTodo);
-    console.log('toggleComplete -> currentTodo', currentTodo);
+    currentBurger.complete = !currentBurger.complete;
+    spanEl.style.textDecoration = "line-through";
+    updateBurger(currentBurger);
+    console.log("toggleSmashed -> currentBurger", currentBurger);
   };
 
-  // Function to actually put the todo on the page
-  const insertTodo = (e) => {
+  // Function to actually put the burger on the page
+  const createBurger = (e) => {
     e.preventDefault();
-    const todo = {
-      text: document.getElementById('newTodo').value.trim(),
+    const burger = {
+      text: document.getElementById("newBurger").value.trim(),
       complete: false,
     };
-    if (todo.text) {
-      fetch('/api/todos', {
-        method: 'POST',
+    if (burger.text) {
+      fetch("/api/burgers", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(todo),
+        body: JSON.stringify(burger),
       })
         .then((response) => response.json())
         .then(() => {
-          document.getElementById('newTodo').value = '';
-          getTodos();
+          document.getElementById("newBurger").value = "";
+          getBurgers();
         });
     }
   };
-  todoForm.addEventListener('submit', insertTodo);
+  burgerForm.addEventListener("submit", createBurger);
 });

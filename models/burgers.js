@@ -6,9 +6,9 @@
 // Add a flag for complete so that it's false by default if not given a value
 
 module.exports = (sequelize, DataTypes) => {
-  const Todo = sequelize.define('Todo', {
-    text: DataTypes.STRING,
-    complete: DataTypes.BOOLEAN,
+  const Burger = sequelize.define('burger', {
+    name: DataTypes.STRING,
+    smashed: DataTypes.BOOLEAN,
   });
-  return Todo;
+  return Burger;
 };
